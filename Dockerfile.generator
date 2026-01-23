@@ -1,0 +1,5 @@
+FROM python:3.10
+RUN pip install kafka-python==2.0.2
+COPY generator.py /srv/bin/generator.py
+ENV PYTHONUNBUFFERED=1
+CMD [ "python", "-u", "/srv/bin/generator.py" ]
