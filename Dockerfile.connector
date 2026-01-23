@@ -1,0 +1,5 @@
+FROM python:3.10
+RUN pip install kafka-python==2.0.2 cassandra-driver==3.29.2
+COPY connector.py /srv/bin/connector.py
+ENV PYTHONUNBUFFERED=1
+CMD [ "python", "-u", "/srv/bin/connector.py" ]
