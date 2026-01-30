@@ -17,7 +17,7 @@ stmt_get = session.prepare("""
     SELECT generator, ts, v1, f
     FROM latest
     WHERE generator = ?
-""""
+""")
 
 def update_latest(generator: str, ts: datetime, v1: float, f: float):
     """

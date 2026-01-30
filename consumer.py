@@ -3,19 +3,16 @@ import json
 import time
 from kafka import KafkaConsumer
 from kafka.errors import NoBrokersAvailable
+from db_latest import update_latest
+from db_raw import save_raw
+# from db_counts import increment_count TODO
 
 
-# TODO: podmienić na prawdziwe funkcje
-try:
-    from db_mocks import save_raw, update_latest, increment_count
-except ImportError:
-    print("Brak modułów")
-    exit(1)
-
-# ENV conf (upewnić się czy jest tak jak w docker-compose później(
+# ENV conf (upewnić się czy jest tak jak w docker-compose później)
 KAFKA_BROKER = os.environ.get("KAFKA_BROKER", "localhost:9092")
 KAFKA_TOPIC = os.environ.get("KAFKA_TOPIC", "measurements")
 KAFKA_GROUP = os.environ.get("KAFKA_GROUP", "measurement_group")
+
 
 def create_consumer():
     """funkcja próbująca połączyć się z Kafką z mechanizmem retry"""
@@ -35,6 +32,7 @@ def create_consumer():
             print("Kafka niedostępna. Ponowna próba za 5s...")
             time.sleep(5)
     return consumer
+
 
 def main():
     consumer = create_consumer()
@@ -63,10 +61,11 @@ def main():
             update_latest(generator, ts, v1, f)
 
             # 3. zliczanie próbek (Osoba 6)
-            increment_count(generator, ts)
+            # increment_count(generator, ts) TODO
 
         except Exception as e:
             print(f"Błąd przetwarzania wiadomości: {e}")
+
 
 if __name__ == "__main__":
     main()
